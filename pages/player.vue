@@ -31,15 +31,7 @@ const { currentProgress, currentlyPlaying, speedBottom, speedTop, player } = sto
 
 const playlists: Ref<Playlist[]> = ref([])
 
-player.value = new WebPlayer(accessToken.value, {
-    ready: () => {
-        console.log('ready')
-        spotifyService.getFeaturedPlaylists(accessToken.value)
-        .then((response) => {
-            playlists.value = response.playlists.items
-        })
-    }
-})
+
 const showMenu = ref(false)
 const isPlaying = ref(false)
 
@@ -56,7 +48,20 @@ async function playNewPlaylist(playlistId: string) {
     isPlaying.value = true
 
 }
-onUnmounted(() => {
+
+onBeforeMount(() => {
+    player.value = new WebPlayer(accessToken.value, {
+        ready: () => {
+            console.log('ready')
+            spotifyService.getFeaturedPlaylists(accessToken.value)
+            .then((response) => {
+                playlists.value = response.playlists.items
+            })
+        }
+    })
+})
+
+onBeforeUnmount(() => {
     if(!player.value) return
     player.value.destroy()
 })
