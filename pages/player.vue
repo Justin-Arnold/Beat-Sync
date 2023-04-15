@@ -38,10 +38,7 @@ player.value = new WebPlayer(accessToken.value, {
         .then((response) => {
             playlists.value = response.playlists.items
         })
-    },
-    progress: (data) => {
-        // console.log('progress', data)
-    },
+    }
 })
 const showMenu = ref(false)
 const isPlaying = ref(false)
