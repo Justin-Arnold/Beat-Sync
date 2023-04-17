@@ -17,15 +17,25 @@
 
 <script lang="ts" setup>
 
-const isOpen = ref(false)
+const manualIsOpen = ref(false)
+const isOpen = computed(() => {
+    console.log(props.modelValue)
+    if(props.modelValue) {
+        return props.modelValue
+    } else {
+        return manualIsOpen.value
+    }
+})
 const drawerContent: Ref<HTMLElement | null> = ref(null)
 const drawerWrapper: Ref<HTMLElement | null> = ref(null)
 
 
 type Props = {
-    anchor: 'left' | 'right' | 'top' | 'bottom'
+    anchor: 'left' | 'right' | 'top' | 'bottom',
+    modelValue?: boolean
 }
 const props = defineProps<Props>();
+const emit = defineEmits(['update:modelValue'])
 
 const viewportAnchorClasses = computed(() => {
     const classMap = {
@@ -64,15 +74,27 @@ watch(isOpen, (value) => {
 })
 
 function toggle() {
-    isOpen.value = !isOpen.value
+    if (props.modelValue) {
+        emit('update:modelValue', !isOpen.value)
+    } else {
+        manualIsOpen.value = !manualIsOpen.value
+    }
 }
 
 onMounted(() => {
-    if (!drawerWrapper.value) return
-    drawerWrapper.value.style.transform = props.anchor === 'left' || props.anchor === 'right' ?
-        `translateX(-${drawerContent.value?.offsetWidth}px) translateY(-50%)`
-        :
-        `translateY(${drawerContent.value?.offsetHeight}px) translateX(-50%)`
+    if (!props.modelValue) {
+        if (!drawerWrapper.value) return
+            drawerWrapper.value.style.transform = props.anchor === 'left' || props.anchor === 'right' ?
+                `translateX(-${drawerContent.value?.offsetWidth}px) translateY(-50%)`
+                :
+                `translateY(${drawerContent.value?.offsetHeight}px) translateX(-50%)`
+    } else {
+        if (!drawerWrapper.value) return
+        drawerWrapper.value.style.transform = props.anchor === 'left' || props.anchor === 'right' ?
+            `translateX(0px) translateY(-50%)`
+            :
+            `translateY(0px) translateX(-50%)`
+    }
 })
 
 </script>
