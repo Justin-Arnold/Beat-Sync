@@ -52,7 +52,6 @@ async function playNewPlaylist(playlistId: string) {
 onBeforeMount(() => {
     player.value = new WebPlayer(accessToken.value, {
         ready: () => {
-            console.log('ready')
             spotifyService.getFeaturedPlaylists(accessToken.value)
             .then((response) => {
                 playlists.value = response.playlists.items

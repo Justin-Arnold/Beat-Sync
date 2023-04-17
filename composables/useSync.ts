@@ -57,13 +57,10 @@ export const useSync = (pingDelay = 2500) => {
 
     //watch each key in the activeIntervals object, and call the corresponding hook
     const deepWatcher = (property: IntervalType) => {
-        // console.log(`watching ${property}`);
         watch(
           () => activeIntervals.value[property],
           (newValue, oldValue) => {
-            // console.log(`watch triggered ${property}...`)
             if (newValue !== oldValue) {
-                // console.log(`success ${property}`)
               hooks.value[property](newValue);
             }
           },
@@ -88,7 +85,6 @@ export const useSync = (pingDelay = 2500) => {
     }
 
     function ping() {
-        // console.log('ping')
         setTimeout(() => getCurrentlyPlaying(), pingDelay)
     }
 
@@ -110,7 +106,6 @@ export const useSync = (pingDelay = 2500) => {
     }
 
     function processResponse(data: any) {
-        // console.log('processResponse')
         const songsInSync = (JSON.stringify(data.item) === JSON.stringify(currentlyPlaying.value))
         if (isInitialized.value === false || !songsInSync || isActivelySyncing.value === false) {
             return getTrackInfo(data)
@@ -141,12 +136,10 @@ export const useSync = (pingDelay = 2500) => {
     }
 
     function setActiveIntervals () {
-        // console.log('setActiveIntervals')
         const determineInterval = (type: IntervalType) => {
             if (!trackAnalysis.value) return
             const analysis = trackAnalysis.value[type];
             const progress = currentProgress.value;
-            // console.log('===')
             //get the index of the interval that contains the current progress
             const index = analysis.findIndex((interval: any) => {
                 const lowEnd = interval.start*1000;
@@ -155,24 +148,10 @@ export const useSync = (pingDelay = 2500) => {
             })
 
             return index;
-
-            // analysis.forEach((interval: any, i: number) => {
-            //     console.log(interval)
-            //     const lowEnd = interval.start*1000;
-            //     const highEnd = interval.start*1000 + interval.duration*1000;
-            //     console.log(lowEnd, progress, highEnd)
-            //     if (lowEnd <= progress && progress < highEnd) {
-            //         console.log('returning', i)
-            //         return i;
-            //     }
-            // })
-            // return analysis.length - 1;
         };
         intervalTypes.forEach((type) => {
-            // console.log('check analysis')
             if(!trackAnalysis.value) return;
             const index = determineInterval(type);
-            // console.log('index', index)
             if(!index) return;
             activeIntervals.value[type] = trackAnalysis.value[type][index];
         });

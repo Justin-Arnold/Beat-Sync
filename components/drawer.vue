@@ -19,7 +19,6 @@
 
 const manualIsOpen = ref(false)
 const isOpen = computed(() => {
-    console.log(props.modelValue)
     if(props.modelValue) {
         return props.modelValue
     } else {

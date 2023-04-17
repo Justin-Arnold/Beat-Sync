@@ -209,7 +209,6 @@ onMounted(() => {
         const now = Date.now();
         const timeSinceLastBeat = now - lastBeat.value;
         const progress = timeSinceLastBeat / (currentBeat.value.duration*1000);
-        console.log(progress)
         spotlightIntensity.value = speedTop.value - Math.min(progress * speedTop.value, speedBottom.value);
     };
 
