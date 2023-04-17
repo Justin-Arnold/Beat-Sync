@@ -1,6 +1,6 @@
 <template>
     <Button @click="logout('/')" class="fixed top-4 right-4 z-[999]">Logout</Button>
-    <Drawer anchor="left">
+    <Drawer anchor="left" v-model="playerDrawerOpenState">
         <div class="card w-[400px] flex flex-col items-center">
             <CurrentlyPlaying></CurrentlyPlaying>
             <div class="text-white py-2 my-2 rounded-xl overflow-auto scrollbar-none whitespace-nowrap bg-neutral-300">
@@ -32,7 +32,7 @@ const { currentProgress, currentlyPlaying, speedBottom, speedTop, player } = sto
 const playlists: Ref<Playlist[]> = ref([])
 
 
-const showMenu = ref(false)
+const playerDrawerOpenState = ref(true)
 const isPlaying = ref(false)
 
 
